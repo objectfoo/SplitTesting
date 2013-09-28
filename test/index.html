@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Split Testing Tests</title>
+	<link rel="stylesheet" href="lib/qunit/qunit.css">
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-fixture"></div>
+
+
+	<script src="lib/qunit/qunit.js"></script>
+	<script src="lib/sinon/sinon.js"></script>
+	<!--[if LTE IE 8]>
+	<script src="lib/sinon/sinon-ie.js"></script>
+	<![endif]-->
+	<script>
+		MotionPointUtils = {};
+		MotionPointUtils.getCorrectedUrlForMotionPoint = function (url) { return url; };
+	</script>
+	<script src="lib/AjaxSetup.js"></script>
+	<script src="lib/JsUtils/JsUtils.dom.js"></script>
+	<script src="lib/JsUtils/JsUtils.events.js"></script>
+	<script src="../SplitTesting.js"></script>
+	<script src="../SplitTesting.simple.js"></script>
+	<script src="SplitTestingTests.js"></script>
+</body>
+</html>
