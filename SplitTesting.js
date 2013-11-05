@@ -1,4 +1,5 @@
 /*globals JsUtils*/
+/*jshint unused: false*/
 var SplitTesting = (function (JsUtils) {
     'use strict';
 
@@ -11,22 +12,18 @@ var SplitTesting = (function (JsUtils) {
         if (!pred) throw new Error(msg);
     }
 
-
     function existy(obj) {
         /*jshint eqnull:true*/
         return obj != null;
     }
 
-
     function bodyHasClass(className) {
         return JsUtils.hasClass(document.body, className) && className;
     }
 
-
     function getVariant() {
         return bodyHasClass(CSS_TEST_A) || bodyHasClass(CSS_TEST_B);
     }
-
 
     function whichSplitTest(whichGroup) {
         return function () {
@@ -34,11 +31,9 @@ var SplitTesting = (function (JsUtils) {
         };
     }
 
-
     function isSplitTest() {
         return !!getVariant();
     }
-
 
     function logEvent(endpoint) {
         var postOptions = {};
@@ -53,7 +48,6 @@ var SplitTesting = (function (JsUtils) {
             JsUtils.post(endpoint, data, postOptions);
         };
     }
-
 
     return {
         isSplitTest: isSplitTest,
@@ -80,5 +74,4 @@ var SplitTesting = (function (JsUtils) {
             existy: existy
         }
     };
-
 }(JsUtils));

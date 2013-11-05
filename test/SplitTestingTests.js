@@ -1,4 +1,4 @@
-/*global test, strictEqual, equal, module, sinon, SplitTesting, JsUtils, throws, ok*/
+/*global test, deepEqual, strictEqual, equal, module, sinon, SplitTesting, JsUtils, throws, ok*/
 (function () {
 	'use strict';
 	var fixture = document.getElementById('qunit-fixture'),
@@ -278,7 +278,7 @@
 	test('Should convert string into Object', function () {
 		var str,
 			result,
-			expected = {id: "1", click: "clicked message", view: "viewed message"};
+			expected = {id: '1', click: 'clicked message', view: 'viewed message'};
 
 		str = 'id: 1, click: clicked message, view: viewed message';
 		result = SplitTesting.simple.parse(str);
@@ -288,7 +288,7 @@
 		str = ' id : 1 , click : clicked message, view: viewed message ';
 		result = SplitTesting.simple.parse(str);
 		deepEqual(result, expected,
-			'converted string with extraneous space into valid data Object')
+			'converted string with extraneous space into valid data Object');
 	});
 
 

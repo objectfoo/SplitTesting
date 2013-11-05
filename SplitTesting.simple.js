@@ -4,10 +4,9 @@ var SplitTesting = (function (SplitTesting, JsUtils, document) {
 
     var ATT_SIMPLETEST  = 'data-simpletest',
         querySelectAll  = document.querySelectorAll,
-        ST              = SplitTesting,
-        isSplitTest     = ST.isSplitTest,
-        _assert         = ST.util._assert,
-        existy          = ST.util.existy,
+        isSplitTest     = SplitTesting.isSplitTest,
+        _assert         = SplitTesting.util._assert,
+        existy          = SplitTesting.util.existy,
 
     off = function (type, el, fn) {
         if (el.detachEvent) {
@@ -26,7 +25,7 @@ var SplitTesting = (function (SplitTesting, JsUtils, document) {
         var el = e.target,
             splitTest = el.splitTest;
 
-        ST.logClick(splitTest.id, splitTest.view);
+        SplitTesting.logClick(splitTest.id, splitTest.view);
         off('click', el, clickOnceListener);
     }
 
@@ -58,7 +57,7 @@ var SplitTesting = (function (SplitTesting, JsUtils, document) {
         var splitTest = parse(elem.getAttribute(ATT_SIMPLETEST));
 
         elem.splitTest = splitTest;
-        ST.logView(splitTest.id, splitTest.view);
+        SplitTesting.logView(splitTest.id, splitTest.view);
         JsUtils.on('click', elem, clickOnceListener);
     }
 
