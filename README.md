@@ -79,3 +79,36 @@ SplitTesting.init({
     }
 });
 ```
+
+or
+
+```javascript
+// support mulitple log messages
+SplitTesting.init({
+	experiment [
+		{
+			id: 1,
+			view: "viewed_item1",
+			click: "click_item1",
+			target: function() { 
+				return byId("item1");
+			}
+		},
+		{
+			id: 2, view:
+			"viewed_item2",
+			click: "click_item2",
+			target: function() { 
+				return byId("item2");
+			}
+		}
+	],
+	setupCondition: function() {
+		return coachingIsFirstItem();
+	},
+
+	setup: function() {
+		$("item1").click();
+	}
+});
+```
