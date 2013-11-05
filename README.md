@@ -70,6 +70,9 @@ SplitTesting.init({
     id: 1,
     view: 'viewed_message',
     click: 'clicked_message',
+    target: function () {
+        return document.getElementById('someLink');
+    },
     setupA: null // || undefined || Function
     setupB: function () {
         $('#magicLink').click();
