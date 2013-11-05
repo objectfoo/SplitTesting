@@ -42,30 +42,24 @@ $(document).ready(function () {
     $firstStep = $('#magicDiv').find('li').first();
 
     if ($firstStep.hasClass('ponyPower')) {
-        registerCriteria();
+        setupExperiment();
     }
 });
 
 
-function registerCriteria () {
+function setupExperiment () {
+    var viewId = 1,
+        clickId = 2;
 
     // always log a viewed event before you attach a click handler
-    // a click event without a viewed event will really mess up results
-    if (SplitTesting.isSplitTestA()) {
-        SplitTesting.logView(1, 'split test A was viewed');
-
-        $('#magicDiv').find('first').one('click', function () {
-            SplitTesting.logClick(1, 'split test b was clicked')
-        });
-    }
+    // a click event without a viewed event will mess up results
+    SplitTesting.logView(testId, 'split test viewed');
 
     if (SplitTesting.isSplitTestB()) {
-        SplitTesting.logView(1, 'split test B was viewed');
-
-        $('#magicDiv').find('first').one('click', function () {
-            SplitTesting.logClick(1, 'split test B was clicked')
-        });
+        $firstStep.addClass('specialGroupBClass');
     }
+    $firstStep.one('click', function () {
+        SplitTesting.logClick(clickId, 'split test target clicked')
+    });
 }
 ```
-
