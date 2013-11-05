@@ -49,6 +49,10 @@ var SplitTesting = (function (JsUtils) {
         };
     }
 
+    function init(config) {
+        alert('not implemented yet');
+    }
+
     return {
         isSplitTest: isSplitTest,
         isSplitTestA: whichSplitTest(CSS_TEST_A),
@@ -56,6 +60,8 @@ var SplitTesting = (function (JsUtils) {
 
         logClick: logEvent(URL_CLICK),
         logView: logEvent(URL_VIEW),
+
+        init: init,
 
         // legacy API
         isSplitTestingEnabled: function () {
