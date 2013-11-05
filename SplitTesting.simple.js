@@ -2,11 +2,12 @@
 var SplitTesting = (function (SplitTesting, JsUtils, document) {
     'use strict';
 
-    var ATT_SIMPLETEST  = 'data-simpletest',
-        querySelectAll  = document.querySelectorAll,
-        isSplitTest     = SplitTesting.isSplitTest,
-        _assert         = SplitTesting.util._assert,
-        existy          = SplitTesting.util.existy,
+    var ATT_SIMPLETEST = 'data-simpletest',
+        qsa            = document.querySelectorAll,
+        isSplitTest    = SplitTesting.isSplitTest,
+        _assert        = SplitTesting.util._assert,
+        existy         = SplitTesting.util.existy,
+        off;
 
     off = function (type, el, fn) {
         if (el.detachEvent) {
@@ -32,8 +33,8 @@ var SplitTesting = (function (SplitTesting, JsUtils, document) {
     function init() {
         var elem;
 
-        if (!!querySelectAll && !isSplitTest()) {
-            elem = querySelectAll.call(document, '[' + ATT_SIMPLETEST + ']')[0];
+        if (!!qsa && !isSplitTest()) {
+            elem = qsa.call(document, '[' + ATT_SIMPLETEST + ']')[0];
             setupCriteria(elem);
         }
     }

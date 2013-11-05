@@ -5,25 +5,25 @@ Rewrite of SplitTest.js
 moved auto init stuff to a branch.
 
 ```javascript
-SplitTest.isSplitTest() // is splitTestA || splitTestB on body
+SplitTest.isSplitTest()  // returns bool
 
-SplitTest.isSplitTestA() // is splitTestA on body
-SplitTest.isSplitTestB() // is splitTestB on body
+SplitTest.isSplitTestA() // returns bool
+SplitTest.isSplitTestB() // returns bool
 
 // Log Events
 // id and msg required
-// config.success, config.error are optional
-SplitTest.logClick(id, msg, config) // send a click event to server
-SplitTest.logView(id, msg, config)  // send view message to server
+// success and error optional
+SplitTest.logClick(id, msg, {success: Function, error: Function})
+SplitTest.logView(id, msg, {success: Function, error: Function})
 
 // LEGACY API
 // is split testing enabled, invokes isSplitTest
-SplitTest.isSplitTestingEnabled()
+SplitTest.isSplitTestingEnabled() // returns bool
 
 // Log Events
 // id and msg required
-SplitTest.logSuccess(id, msg)       // invokes logClick
-SplitTest.logViewedSuccess(id, msg) // invokes logView
+SplitTest.logSuccess(id, msg)
+SplitTest.logViewedSuccess(id, msg)
 ```
 
 ## Initialization example
@@ -44,22 +44,35 @@ $(document).ready(function () {
     if ($firstStep.hasClass('ponyPower')) {
         setupExperiment();
     }
-});
 
+    // mainpulate dom if needed
+    // log view
+    // register event to log click
+    function setupExperiment () {
+        var experimentID = 1;
 
-function setupExperiment () {
-    var viewId = 1,
-        clickId = 2;
+        SplitTesting.logView(experimentId, 'viewed_message');
 
-    // always log a viewed event before you attach a click handler
-    // a click event without a viewed event will mess up results
-    SplitTesting.logView(testId, 'split test viewed');
-
-    if (SplitTesting.isSplitTestB()) {
-        $firstStep.addClass('specialGroupBClass');
+        if (SplitTesting.isSplitTestB()) {
+            $firstStep.addClass('specialGroupBClass');
+        }
+        $firstStep.one('click', function () {
+            SplitTesting.logClick(experimentId, 'clicked_message');
+        });
     }
-    $firstStep.one('click', function () {
-        SplitTesting.logClick(clickId, 'split test target clicked')
-    });
-}
+});
+```
+## Better init example
+
+```javascript
+// TODO
+SplitTesting.init({
+    id: 1,
+    view: 'viewed_message',
+    click: 'clicked_message',
+    setupA: null // || undefined || Function
+    setupB: function () {
+        $('#magicLink').click();
+    }
+});
 ```
