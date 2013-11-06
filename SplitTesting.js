@@ -17,22 +17,24 @@ var SplitTesting = (function (JsUtils) {
         return obj != null;
     }
 
+    // test if body has class className
+    // returns false or className
     function bodyHasClass(className) {
         return JsUtils.hasClass(document.body, className) && className;
     }
 
-    function getVariant() {
+    function getExperimentGroup() {
         return bodyHasClass(CSS_TEST_A) || bodyHasClass(CSS_TEST_B);
     }
 
     function whichSplitTest(whichGroup) {
         return function () {
-            return whichGroup === getVariant();
+            return whichGroup === getExperimentGroup();
         };
     }
 
     function isSplitTest() {
-        return !!getVariant();
+        return !!getExperimentGroup();
     }
 
     function logEvent(endpoint) {
