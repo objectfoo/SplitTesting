@@ -19,7 +19,6 @@
 })();
 
 
-
 /**
 * Givens
 **************************************************************************/
@@ -40,39 +39,6 @@ var given = (function (given) {
 		document.body.className = '';
 	};
 
-	given.experiment = function () {
-		var obj = {
-			'href': '#',
-			'test': 'id:1, view:viewedmessage, click: clickedmessage',
-			'content': 'content'
-		};
-		fixture.innerHTML =
-			('<a href="{href}" ' +
-				'data-simpletest="{test}"' +
-				'>{content}</a>').supplant(obj);
-	};
-
-	given.validAttrString = function () {
-		return 'id: 1, click: clicked message, view: viewed message';
-	};
-
-	given.wonkyAttrString = function () {
-		return ' id : 1 , click : clicked message, view: viewed message ';
-	};
-
 	return given;
 })(given || {});
 
-
-
-/**
-* Whens
-**************************************************************************/
-var when = (function (when, SplitTesting) {
-	'use strict';
-
-	when.simpleInit = function () {
-		SplitTesting.simple.init();
-	};
-	return when;
-})(when || {}, SplitTesting);
