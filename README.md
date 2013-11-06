@@ -101,7 +101,7 @@ SplitTesting.init({
 			return byId("item2");
 		}
 	}],
-	setupCondition: function() {
+	runTestIf: function() {
 		return coachingIsFirstItem();
 	},
 

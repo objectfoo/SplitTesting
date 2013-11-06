@@ -4,7 +4,7 @@
 
 	module('SplitTesting.init');
 
-	test('Should accept a config object', function () {
+	test('Should throw an error if experiment target not defined', function () {
 		ok(0);
 	});
 
@@ -16,15 +16,11 @@
 		ok(0);
 	});
 
-	test('Should execture setupA function when split test A', function () {
+	test('Should execute setup function when defined', function () {
 		ok(0);
 	});
 
-	test('Should execture setupB function when split test B', function () {
-		ok(0);
-	});
-
-	test('Should add a click handler to element identified by target function', function () {
+	test('runTestIf', function () {
 		ok(0);
 	});
 

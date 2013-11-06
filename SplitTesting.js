@@ -8,6 +8,10 @@ var SplitTesting = (function (JsUtils) {
         URL_CLICK  = '/UI/SplitTesting.aspx/Success',
         URL_VIEW   = '/UI/SplitTesting.aspx/ViewedSuccess';
 
+    function isFunction(fn) {
+        return typeof fn === 'function';
+    }
+
     function _assert(pred, msg) {
         if (!pred) throw new Error(msg);
     }
@@ -52,7 +56,25 @@ var SplitTesting = (function (JsUtils) {
     }
 
     function init(config) {
-        alert('not implemented yet');
+        var c = config || {}
+            i, exp;
+
+        if (!isSplitTest() ||
+                isFunction(c.setupCondition) && !c.setupCondition() ||
+                isFunction(c.runTestIf) && !c.runTestIf()) {
+            return;
+        }
+
+        for (i = c.experiment.length - 1; i >= 0; i--) {
+            exp = c.experiment[i];
+            _assert(!isFunction(exp.target));
+            
+            if (isFunction(exp.setup)) {
+                exp.setup();
+            }
+            logView();
+            JsUtils.addEvent('click', logClick);
+        };
     }
 
     return {
