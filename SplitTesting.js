@@ -6,7 +6,10 @@ var SplitTesting = (function (JsUtils) {
     var CSS_TEST_A = 'splitTestA',
         CSS_TEST_B = 'splitTestB',
         URL_CLICK  = '/UI/SplitTesting.aspx/Success',
-        URL_VIEW   = '/UI/SplitTesting.aspx/ViewedSuccess';
+        URL_VIEW   = '/UI/SplitTesting.aspx/ViewedSuccess',
+
+        logView = logEvent(URL_VIEW),
+        logClick = logEvent(URL_CLICK);
 
     function isFunction(fn) {
         return typeof fn === 'function';
@@ -82,8 +85,8 @@ var SplitTesting = (function (JsUtils) {
         isSplitTestA: whichSplitTest(CSS_TEST_A),
         isSplitTestB: whichSplitTest(CSS_TEST_B),
 
-        logClick: logEvent(URL_CLICK),
-        logView: logEvent(URL_VIEW),
+        logClick: logClick,
+        logView: logView,
 
         init: init,
 
