@@ -65,6 +65,11 @@ var SplitTesting = (function (JsUtils) {
 
         init: init,
 
+        util: {
+            _assert: _assert,
+            existy: existy
+        },
+
         // legacy API
         isSplitTestingEnabled: function () {
             return this.isSplitTest();
@@ -76,10 +81,6 @@ var SplitTesting = (function (JsUtils) {
 
         logViewedSuccess: function (id, msg) {
             return this.logView(id, msg);
-        },
-        util: {
-            _assert: _assert,
-            existy: existy
         }
     };
 }(JsUtils));
