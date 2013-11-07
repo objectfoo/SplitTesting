@@ -1,6 +1,16 @@
-/*globals JsUtils*/
+/*globals JsUtils, define*/
 /*jshint unused: false*/
-var SplitTesting = (function (JsUtils) {
+(function (root, factory) {
+    'use strict';
+    if (typeof define === 'function' && define.amd) {
+        define(['JsUtils'], function (JsUtils) {
+            root.SplitTesting = factory(JsUtils);
+            return root.SplitTesting;
+        });
+    } else {
+        root.SplitTesting = factory(root.JsUtils);
+    }
+}(this, function (JsUtils) {
     'use strict';
 
     var CSS_TEST_A = 'splitTestA',
@@ -59,7 +69,7 @@ var SplitTesting = (function (JsUtils) {
     }
 
     function init(config) {
-        var c = config || {}
+        var c = config || {},
             i, exp;
 
         if (!isSplitTest() ||
@@ -77,7 +87,7 @@ var SplitTesting = (function (JsUtils) {
             }
             logView();
             JsUtils.addEvent('click', logClick);
-        };
+        }
     }
 
     return {
@@ -108,4 +118,5 @@ var SplitTesting = (function (JsUtils) {
             return this.logView(id, msg);
         }
     };
-}(JsUtils));
+}));
+
