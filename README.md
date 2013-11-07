@@ -29,17 +29,32 @@ SplitTest.logViewedSuccess(id, msg)
 ## Initialization example
 
 ```javascript
-// support mulitple log messages
+// single experiment id
 SplitTesting.init({
-    experiment [{
+    id: 1,
+    view: "viewed_item1",
+    click: "click_item1",
+    target: function () {
+        return document.getElementById('item1');
+    },
+    runTestIf: function () {
+        // optional return boolean to run test
+    },
+    setup: function () {
+        // execute if isSplitTest() && runTestIf()
+    }
+});
+
+// multiple experiment ids
+SplitTesting.init({
+    experiments: [{
         id: 1,
         view: "viewed_item1",
         click: "click_item1",
         target: function() { 
             return byId("item1");
         }
-    },
-    {
+    }, {
         id: 2, view:
         "viewed_item2",
         click: "click_item2",

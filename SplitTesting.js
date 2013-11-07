@@ -19,7 +19,15 @@
         URL_VIEW   = '/UI/SplitTesting.aspx/ViewedSuccess',
 
         logView = logEvent(URL_VIEW),
-        logClick = logEvent(URL_CLICK);
+        logClick = logEvent(URL_CLICK),
+        undefined;
+
+    function invokeIfDef(fn) {
+        if (isFunction(fn)) {
+            return fn();
+        }
+        return;
+    }
 
     function isFunction(fn) {
         return typeof fn === 'function';
@@ -68,25 +76,34 @@
         };
     }
 
+    function setupExperiment(id, target, viewMessage, clickMessage) {
+        _assert(isFunction(target), 'setupExperiment(): target needs to be a function');
+        logView(id, viewMessage);
+        JsUtils.addEvent('click', target(), function () {
+            logClick(id, clickMessage);
+        });
+    }
+
     function init(config) {
-        var c = config || {},
-            i, exp;
+        var i, exp, target;
+
+        config = config || {};
 
         if (!isSplitTest() ||
-                isFunction(c.setupCondition) && !c.setupCondition() ||
-                isFunction(c.runTestIf) && !c.runTestIf()) {
+                invokeIfDef(config.setupCondition) ||
+                invokeIfDef(config.runTestIf)) {
             return;
         }
+        invokeIfDef(config.setup);
 
-        for (i = c.experiment.length - 1; i >= 0; i--) {
-            exp = c.experiment[i];
-            _assert(!isFunction(exp.target));
-            
-            if (isFunction(exp.setup)) {
-                exp.setup();
+        if (config.experiment === undefined) {
+            setupExperiment(config.id, config.target, config.view, config.click);
+        }
+        else {
+            for (i = config.experiment.length - 1; i >= 0; i--) {
+                exp = config.experiment[i];
+                setupExperiment(exp.id, exp.target, exp.view, exp.click);
             }
-            logView();
-            JsUtils.addEvent('click', logClick);
         }
     }
 

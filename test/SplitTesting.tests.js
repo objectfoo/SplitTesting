@@ -222,25 +222,46 @@
 			'sent with description ' + this.strings.STR_CLICK_MESSAGE);
 	});
 
-	module('SplitTesting.init');
+	module('SplitTesting.init', {
+		setup: function () {
+			this.bodyClassName = document.body.className;
+			this.stub = {};
+			this.stub.post = sinon.stub(JsUtils, 'post');
+			this.stub.addEvent = sinon.stub(JsUtils, 'addEvent');
+		},
+		teardown: function () {
+			this.stub.post.restore();
+			this.stub.addEvent.restore();
+			document.body.className = this.bodyClassName;
+		}
+	});
 
-	test('Should throw an error if experiment target not defined', function () {
+	test('Should setup a test with a config object', function () {
+		given.splitTestB();
+
+		throws(function () {
+			SplitTesting.init({ experiment: [{click: '', view: '', id: 1}] });
+		}, 'Throws an error when target undefined');
+
+		SplitTesting.init({
+			target: function () {
+				return document.getElementById('qunit-fixture');
+			}, click: '', view: '', id: 1
+		});
+		ok(true, "Did not raise when target is a function");
+		equal(this.stub.post.callCount, 1, 'Logged a view message');
+		equal(this.stub.addEvent.callCount, 1, 'Added 1 event listener');
+	});
+
+	test('Should setup multiple experiments with an experimets config array', function () {
 		ok(0);
 	});
 
-	test('Should log a view with id and viewed message', function () {
+	test('Should execute setup when called with parameters', function () {
 		ok(0);
 	});
 
-	test('Should log a click with id and clicked message', function () {
-		ok(0);
-	});
-
-	test('Should execute setup function when defined', function () {
-		ok(0);
-	});
-
-	test('runTestIf', function () {
+	test('Should not run setup when runTestIf returns false', function () {
 		ok(0);
 	});
 
