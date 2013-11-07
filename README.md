@@ -29,6 +29,36 @@ SplitTest.logViewedSuccess(id, msg)
 ## Initialization example
 
 ```javascript
+// support mulitple log messages
+SplitTesting.init({
+    experiment [{
+        id: 1,
+        view: "viewed_item1",
+        click: "click_item1",
+        target: function() { 
+            return byId("item1");
+        }
+    },
+    {
+        id: 2, view:
+        "viewed_item2",
+        click: "click_item2",
+        target: function() { 
+            return byId("item2");
+        }
+    }],
+    runTestIf: function() {
+        return coachingIsFirstItem();
+    },
+
+    setup: function() {
+        $("item1").click();
+    }
+});
+```
+## Manually initialize
+
+```javascript
 $(document).ready(function () {
     var $firstStep;
 
@@ -60,53 +90,5 @@ $(document).ready(function () {
             SplitTesting.logClick(experimentId, 'clicked_message');
         });
     }
-});
-```
-## Better init example
-
-```javascript
-// TODO
-SplitTesting.init({
-    id: 1,
-    view: 'viewed_message',
-    click: 'clicked_message',
-    target: function () {
-        return document.getElementById('someLink');
-    },
-    setupA: null // || undefined || Function
-    setupB: function () {
-        $('#magicLink').click();
-    }
-});
-```
-
-or
-
-```javascript
-// support mulitple log messages
-SplitTesting.init({
-	experiment [{
-		id: 1,
-		view: "viewed_item1",
-		click: "click_item1",
-		target: function() { 
-			return byId("item1");
-		}
-	},
-	{
-		id: 2, view:
-		"viewed_item2",
-		click: "click_item2",
-		target: function() { 
-			return byId("item2");
-		}
-	}],
-	runTestIf: function() {
-		return coachingIsFirstItem();
-	},
-
-	setup: function() {
-		$("item1").click();
-	}
 });
 ```
