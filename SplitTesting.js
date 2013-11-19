@@ -10,7 +10,7 @@
     } else {
         root.SplitTesting = factory(root.JsUtils);
     }
-}(this, function (JsUtils) {
+}(this, function (JsUtils, undefined) {
     'use strict';
 
     var CSS_TEST_A = 'splitTestA',
@@ -18,17 +18,8 @@
         URL_CLICK  = '/UI/SplitTesting.aspx/Success',
         URL_VIEW   = '/UI/SplitTesting.aspx/ViewedSuccess',
 
-        toString = Object.prototype.toString,
         logView = logEvent(URL_VIEW),
-        logClick = logEvent(URL_CLICK),
-        undefined;
-
-    function invokeIfDef(fn) {
-        if (isFunction(fn)) {
-            return fn();
-        }
-        return;
-    }
+        logClick = logEvent(URL_CLICK);
 
     function isFunction(fn) {
         return typeof fn === 'function';
@@ -77,35 +68,6 @@
         };
     }
 
-    function setupExperiment(id, target, viewMessage, clickMessage) {
-        _assert(isFunction(target), 'setupExperiment(): target needs to be a function');
-        logView(id, viewMessage);
-        JsUtils.addEvent('click', target(), function () {
-            logClick(id, clickMessage);
-        });
-    }
-
-    function init(config) {
-        var i, exp, target;
-
-        config = config || {};
-
-        if (!isSplitTest() ||
-                invokeIfDef(config.setupCondition) ||
-                invokeIfDef(config.runTestIf)) {
-            return;
-        }
-
-        // throw if missing required param
-        _assert(toString.call(config.id) === '[object Number]', 'init() id required');
-        _assert(isFunction(config.target), 'init() target needs to be a function');
-        _assert(toString.call(config.view) === '[object String]', 'init() view message is a required string');
-        _assert(toString.call(config.click) === '[object String]', 'init() click message is a required string')
-
-        invokeIfDef(config.setup);
-        setupExperiment(config.id, config.target, config.view, config.click);
-    }
-
     return {
         isSplitTest: isSplitTest,
         isSplitTestA: whichSplitTest(CSS_TEST_A),
@@ -113,8 +75,6 @@
 
         logClick: logClick,
         logView: logView,
-
-        init: init,
 
         util: {
             _assert: _assert,
