@@ -147,7 +147,7 @@
 		equal(this.stub.post.args[0][0], this.strings.STR_URL_VIEW,
 			'sent to endpoint ' + this.strings.STR_URL_VIEW);
 
-		equal(this.stub.post.args[0][1].splitTestId, '1',
+		equal(this.stub.post.args[0][1].splitTestingId, '1',
 			'sent with id 1');
 
 		equal(this.stub.post.args[0][1].splitTestingDescription, this.strings.STR_VIEW_MESSAGE,
@@ -173,7 +173,7 @@
 		equal(this.stub.post.args[0][0], this.strings.STR_URL_CLICK,
 			'sent to endpoint ' + this.strings.STR_URL_CLICK);
 
-		equal(this.stub.post.args[0][1].splitTestId, '1',
+		equal(this.stub.post.args[0][1].splitTestingId, '1',
 			'went with id 1');
 
 		equal(this.stub.post.args[0][1].splitTestingDescription, this.strings.STR_CLICK_MESSAGE,
@@ -199,7 +199,7 @@
 		equal(this.stub.post.args[0][0], this.strings.STR_URL_VIEW,
 			'sent to endpoint ' + this.strings.STR_URL_VIEW);
 
-		equal(this.stub.post.args[0][1].splitTestId, '1',
+		equal(this.stub.post.args[0][1].splitTestingId, '1',
 			'sent with id 1');
 
 		equal(this.stub.post.args[0][1].splitTestingDescription, this.strings.STR_VIEW_MESSAGE,
@@ -215,7 +215,7 @@
 		equal(this.stub.post.args[0][0], this.strings.STR_URL_CLICK,
 			'sent to endpoint ' + this.strings.STR_URL_CLICK);
 
-		equal(this.stub.post.args[0][1].splitTestId, '1',
+		equal(this.stub.post.args[0][1].splitTestingId, '1',
 			'sent with id 1');
 
 		equal(this.stub.post.args[0][1].splitTestingDescription, this.strings.STR_CLICK_MESSAGE,
@@ -252,17 +252,4 @@
 		equal(this.stub.post.callCount, 1, 'Logged a view message');
 		equal(this.stub.addEvent.callCount, 1, 'Added 1 event listener');
 	});
-
-	test('Should setup multiple experiments with an experimets config array', function () {
-		ok(0);
-	});
-
-	test('Should execute setup when called with parameters', function () {
-		ok(0);
-	});
-
-	test('Should not run setup when runTestIf returns false', function () {
-		ok(0);
-	});
-
 })(given, SplitTesting);

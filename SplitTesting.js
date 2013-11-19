@@ -68,7 +68,7 @@
         return function (id, message) {
             _assert(existy(id) && existy(message), 'logEvent() id and message required');
             var data = {
-                'splitTestId': id,
+                'splitTestingId': id,
                 'splitTestingDescription': message
             };
 
