@@ -239,17 +239,50 @@
 	test('Should setup a test with a config object', function () {
 		given.splitTestB();
 
-		throws(function () {
-			SplitTesting.init({ experiment: [{click: '', view: '', id: 1}] });
-		}, 'Throws an error when target undefined');
-
 		SplitTesting.init({
 			target: function () {
 				return document.getElementById('qunit-fixture');
 			}, click: '', view: '', id: 1
 		});
-		ok(true, "Did not raise when target is a function");
+
 		equal(this.stub.post.callCount, 1, 'Logged a view message');
 		equal(this.stub.addEvent.callCount, 1, 'Added 1 event listener');
+	});
+
+	test('Should throw when missing required config params', function () {
+		given.splitTestB();
+
+		throws(function () {
+			SplitTesting.init({id: 1, view: 'viewed', click: 'clicked'});
+		}, 'Throws an error when target is undefined');
+
+		throws(function () {
+			SplitTesting.init({id: 1, view: 'viewed', click: 'clicked', target: 4});
+		}, 'Throws an error if target is not a function');
+
+		throws(function () {
+			SplitTesting.init({view: 'viewed', click: 'clicked', target: function () {} });
+		}, 'Throws an error if id undefined');
+
+		throws(function () {
+			SplitTesting.init({id: 'asd', view: 'viewed', click: 'clicked', target: function () {} });
+		}, 'Throws an error if id is not a number');
+
+		throws(function () {
+			SplitTesting.init({id: 1, click: 'clicked', target: function () {} });
+		}, 'Throws an error if view is undefined');
+
+		throws(function () {
+			SplitTesting.init({id: 1, view: 1, click: 'clicked', target: function () {} });
+		}, 'Throws an error if view is not a string');
+
+		throws(function () {
+			SplitTesting.init({id: 1, view: '', target: function () {} });
+		}, 'Throws an error if click is undefined');
+
+		throws(function () {
+			SplitTesting.init({id: 1, view: '', click: 1, target: function () {} });
+		}, 'Throws an error if click is not a string');
+
 	});
 })(given, SplitTesting);

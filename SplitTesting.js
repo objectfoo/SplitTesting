@@ -18,6 +18,7 @@
         URL_CLICK  = '/UI/SplitTesting.aspx/Success',
         URL_VIEW   = '/UI/SplitTesting.aspx/ViewedSuccess',
 
+        toString = Object.prototype.toString,
         logView = logEvent(URL_VIEW),
         logClick = logEvent(URL_CLICK),
         undefined;
@@ -94,17 +95,15 @@
                 invokeIfDef(config.runTestIf)) {
             return;
         }
-        invokeIfDef(config.setup);
 
-        if (config.experiment === undefined) {
-            setupExperiment(config.id, config.target, config.view, config.click);
-        }
-        else {
-            for (i = config.experiment.length - 1; i >= 0; i--) {
-                exp = config.experiment[i];
-                setupExperiment(exp.id, exp.target, exp.view, exp.click);
-            }
-        }
+        // throw if missing required param
+        _assert(toString.call(config.id) === '[object Number]', 'init() id required');
+        _assert(isFunction(config.target), 'init() target needs to be a function');
+        _assert(toString.call(config.view) === '[object String]', 'init() view message is a required string');
+        _assert(toString.call(config.click) === '[object String]', 'init() click message is a required string')
+
+        invokeIfDef(config.setup);
+        setupExperiment(config.id, config.target, config.view, config.click);
     }
 
     return {
