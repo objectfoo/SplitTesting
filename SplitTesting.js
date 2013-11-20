@@ -10,7 +10,7 @@
     } else {
         root.SplitTesting = factory(root.JsUtils);
     }
-}(this, function (JsUtils) {
+}(this, function (JsUtils, undefined) {
     'use strict';
 
     var CSS_TEST_A = 'splitTestA',
@@ -20,8 +20,7 @@
 
         toString = Object.prototype.toString,
         logView = logEvent(URL_VIEW),
-        logClick = logEvent(URL_CLICK),
-        undefined;
+        logClick = logEvent(URL_CLICK);
 
     function invokeIfDef(fn) {
         if (isFunction(fn)) {
@@ -77,22 +76,12 @@
         };
     }
 
-    function setupExperiment(id, target, viewMessage, clickMessage) {
-        _assert(isFunction(target), 'setupExperiment(): target needs to be a function');
-        logView(id, viewMessage);
-        JsUtils.addEvent('click', target(), function () {
-            logClick(id, clickMessage);
-        });
-    }
-
     function init(config) {
         var i, exp, target;
 
         config = config || {};
 
-        if (!isSplitTest() ||
-                invokeIfDef(config.setupCondition) ||
-                invokeIfDef(config.runTestIf)) {
+        if (!isSplitTest() || invokeIfDef(config.runTestIf)) {
             return;
         }
 
@@ -100,10 +89,14 @@
         _assert(toString.call(config.id) === '[object Number]', 'init() id required');
         _assert(isFunction(config.target), 'init() target needs to be a function');
         _assert(toString.call(config.view) === '[object String]', 'init() view message is a required string');
-        _assert(toString.call(config.click) === '[object String]', 'init() click message is a required string')
+        _assert(toString.call(config.click) === '[object String]', 'init() click message is a required string');
 
         invokeIfDef(config.setup);
-        setupExperiment(config.id, config.target, config.view, config.click);
+
+        logView(config.id, config.view);
+        JsUtils.addEvent('click', config.target(), function () {
+            logClick(config.id, config.click);
+        });
     }
 
     return {
@@ -117,7 +110,6 @@
         init: init,
 
         util: {
-            setupExperiment: setupExperiment,
             _assert: _assert,
             existy: existy
         },

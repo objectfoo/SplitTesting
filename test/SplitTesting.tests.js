@@ -255,7 +255,10 @@
 		SplitTesting.init({
 			target: function () {
 				return document.getElementById('qunit-fixture');
-			}, click: '', view: '', id: 1
+			},
+			click: 'asdf',
+			view: 'asdf',
+			id: 1
 		});
 
 		equal(this.stub.post.callCount, 1, 'Logged a view message');
