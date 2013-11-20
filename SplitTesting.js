@@ -81,6 +81,7 @@
 
         config = config || {};
 
+        // TODO: add test for runTestIf
         if (!isSplitTest() || invokeIfDef(config.runTestIf)) {
             return;
         }
