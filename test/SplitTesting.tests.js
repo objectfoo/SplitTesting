@@ -56,6 +56,19 @@
 			ok(true, 'doesn\'t throw when called with truthy predicate');
 	});
 
+	test('existy should return falsy only for undefined and null', function () {
+		equal(false, SplitTesting.util.existy(undefined), 'Returned falsy for undefined');
+		equal(false, SplitTesting.util.existy(null), 'Returned falsy for null');
+		equal(true, SplitTesting.util.existy(0), 'Returned truthy for zero');
+		equal(true, SplitTesting.util.existy(-0), 'Returned truthy for negative zero');
+		equal(true, SplitTesting.util.existy(''), 'Returned truthy for empty string');
+		equal(true, SplitTesting.util.existy(false), 'Returned truthy for false');
+		equal(true, SplitTesting.util.existy(NaN), 'Returned truthy for NaN');
+		equal(true, SplitTesting.util.existy('a'), 'Returned truthy for character a');
+		equal(true, SplitTesting.util.existy({}), 'Returned truthy for empty object');
+		equal(true, SplitTesting.util.existy((function () {})), 'Returned truthy for function object');
+	});
+
 	module('SplitTesting.status', {
 		teardown: function () {
 			given.splitTestNone();

@@ -117,6 +117,7 @@
         init: init,
 
         util: {
+            setupExperiment: setupExperiment,
             _assert: _assert,
             existy: existy
         },
