@@ -1,29 +1,36 @@
-/*globals JsUtils, define*/
-/*jshint unused: false*/
-(function (root, factory) {
-    'use strict';
-    if (typeof define === 'function' && define.amd) {
-        define(['JsUtils'], function (JsUtils) {
-            root.SplitTesting = factory(JsUtils);
-            return root.SplitTesting;
-        });
-    } else {
-        root.SplitTesting = factory(root.JsUtils);
-    }
-}(this, function (JsUtils, undefined) {
+/**
+Please record AB Testing IDs here : http://foswiki.dev.webmd.com/bin/view.pl/Main/SplitTestingIDs
+*/
+/*globals JsUtils*/
+var SplitTesting = (function (JsUtils) {
     'use strict';
 
-    var CSS_TEST_A = 'splitTestA',
+    if (SplitTesting !== undefined) {
+        return SplitTesting; // only initialize once
+    }
+
+    var exports = {},
+        startPostingTimer,
+        KEY_SPLIT_TESTING = 'splitTesting',
+        CSS_TEST_A = 'splitTestA',
         CSS_TEST_B = 'splitTestB',
         URL_CLICK  = '/UI/SplitTesting.aspx/Success',
         URL_VIEW   = '/UI/SplitTesting.aspx/ViewedSuccess',
 
         logView = logEvent(URL_VIEW),
-        logClick = logEvent(URL_CLICK);
+        logClick = logEvent(URL_CLICK),
 
-    function isFunction(fn) {
-        return typeof fn === 'function';
-    }
+        hasSessionstorage = (function () {
+            var s = Math.random().toString(36).substring(2,7);
+
+            try {
+                sessionStorage.setItem(s, s);
+                sessionStorage.removeItem(s,s);
+                return true;
+            } catch(e) {
+                return false;
+            }
+        })();
 
     function _assert(pred, msg) {
         if (!pred) throw new Error(msg);
@@ -55,20 +62,61 @@
     }
 
     function logEvent(endpoint) {
-        var postOptions = {};
+        var options = {};
 
         return function (id, message) {
             _assert(existy(id) && existy(message), 'logEvent() id and message required');
             var data = {
-                'splitTestingId': id,
-                'splitTestingDescription': message
-            };
+                    'splitTestingId': id,
+                    'splitTestingDescription': message,
+                    'endpoint': endpoint
+                };
 
-            JsUtils.post(endpoint, data, postOptions);
+            if (hasSessionstorage) {
+                appendMessage(data);
+                postLocalEvents();
+            }
+            else {
+                JsUtils.post(endpoint, data, options);
+            }
         };
     }
 
-    return {
+    function postLocalEvents() {
+        var messages = getMessages(),
+            oldestMessage;
+
+        if (messages.length > 0) {
+            oldestMessage = messages.shift();
+
+            JsUtils.post(oldestMessage.endpoint, oldestMessage, {
+                successCallback: postSuccess
+            });
+        }
+        
+        function postSuccess() {
+            if (messages.length === 0) {
+                sessionStorage.removeItem(KEY_SPLIT_TESTING);
+            }
+            else {
+                sessionStorage.setItem(KEY_SPLIT_TESTING, JSON.stringify(messages));
+                setTimeout(postLocalEvents, 15);
+            }
+        }
+    }
+
+    function getMessages() {
+        return JSON.parse(sessionStorage.getItem(KEY_SPLIT_TESTING)) || [];
+    }
+
+    function appendMessage(newMessage) {
+        var messages = getMessages();
+
+        messages.push(newMessage);
+        sessionStorage.setItem(KEY_SPLIT_TESTING, JSON.stringify(messages));
+    }
+
+    exports = {
         isSplitTest: isSplitTest,
         isSplitTestA: whichSplitTest(CSS_TEST_A),
         isSplitTestB: whichSplitTest(CSS_TEST_B),
@@ -94,5 +142,34 @@
             return this.logView(id, msg);
         }
     };
-}));
 
+    if (window.QUnit) {
+        // export additional functions for tests
+        exports.postLocalEvents = postLocalEvents;
+        exports.appendMessage = appendMessage;
+        exports.setHasSessionStorage = function (value) {
+            hasSessionstorage = value;
+        };
+    }
+    else {
+
+        if (hasSessionstorage && getMessages().length > 0) {
+            startPostingTimer = setTimeout(function () {
+                startPostingTimer = null;
+                postLocalEvents();
+            }, 5000);
+
+            JsUtils.on('load', window, function () {
+
+                if (startPostingTimer !== null) {
+                    clearTimeout(startPostingTimer);
+                    setTimeout(function () {
+                        postLocalEvents();
+                    }, 1000);
+                }
+            });
+        }
+    }
+
+    return exports;
+})(JsUtils);
